@@ -11,6 +11,7 @@ pub fn launch_command(config: &WatcherConfig) {
         .stdout(Stdio::inherit())
         .stderr(Stdio::inherit());
 
+    debug!("{:?}", command);
     let mut process = command.spawn()
         .expect("!spawn");
 

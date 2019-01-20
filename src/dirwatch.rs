@@ -33,7 +33,9 @@ fn build_watch_paths(root_path: &str, paths: &mut collections::HashSet<PathBuf>,
 
 fn react_to_file_change(filename: &str, filter: &Fn(&str) -> bool, config: &WatcherConfig) {
     if filter(filename) {
+        info!("reacting to change for file: {}", filename);
         launch_command(config);
+        info!("command execution finished");
     }
 }
 
