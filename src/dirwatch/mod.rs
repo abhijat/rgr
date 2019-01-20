@@ -22,7 +22,11 @@ pub fn setup_watch(config: WatcherConfig) {
     let extension = config.extension();
 
     let mut paths = collections::HashSet::new();
-    build_watch_paths(config.path_to_watch.as_str(), &mut paths, extension.as_str());
+    build_watch_paths(
+        config.path_to_watch.as_str(),
+        &mut paths,
+        extension.as_str(),
+    ).expect("failed to build watch paths");
 
     info!("added {} paths to watch list", paths.len());
 
