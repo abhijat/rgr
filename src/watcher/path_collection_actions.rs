@@ -46,3 +46,29 @@ pub fn add_paths_to_inotify_watcher<W>(paths: collections::HashSet<PathBuf>, wat
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn build_watch_paths_identifies_paths_correctly() {
+        let root_path = "./sample_files/corleone_family";
+        let mut paths = collections::HashSet::new();
+        build_watch_paths(root_path, &mut paths, ".csv").expect("!build_watch_paths");
+        assert_eq!(paths.len(), 2);
+
+        paths.clear();
+        build_watch_paths(root_path, &mut paths, ".json").expect("!build_watch_paths");
+        assert_eq!(paths.len(), 1);
+    }
+
+    #[test]
+    fn build_watch_paths_watches_every_dir_with_files_in_it_if_extension_is_empty() {
+        let root_path = "./sample_files/corleone_family";
+        let mut paths = collections::HashSet::new();
+        build_watch_paths(root_path, &mut paths, "").expect("!build_watch_paths");
+        eprintln!("paths = {:?}", paths);
+        assert_eq!(paths.len(), 3);
+    }
+}

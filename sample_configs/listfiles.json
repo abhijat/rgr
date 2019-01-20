@@ -1,0 +1,13 @@
+{
+  "command_config": {
+    "binary_path": "ls",
+    "args": [
+      "-l",
+      "-t",
+      "-r"
+    ]
+  },
+  "debounce_in_seconds": 5,
+  "file_extension_to_watch_for": ".csv",
+  "path_to_watch": "./sample_files/corleone_family"
+}
