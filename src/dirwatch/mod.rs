@@ -1,43 +1,15 @@
 use std::collections;
-use std::fs;
-use std::path::PathBuf;
 use std::sync::mpsc::channel;
 use std::time::Duration;
 
 use notify::{DebouncedEvent, RecommendedWatcher, RecursiveMode, Watcher};
 
 use crate::config_parser::WatcherConfig;
-use crate::launcher::launch_command;
+use crate::dirwatch::build_paths::build_watch_paths;
+use crate::dirwatch::change_actions::react_to_file_change;
 
-fn build_watch_paths(root_path: &str, paths: &mut collections::HashSet<PathBuf>, extension: &str) {
-    let rd_dir = fs::read_dir(root_path).expect("!!read_dir");
-
-    for entry in rd_dir {
-        let entry = entry.expect("!!file_entry_read");
-
-        let path = entry.path();
-        let metadata = fs::metadata(&path).expect("!!metadata");
-
-        if metadata.is_file() && entry.file_name().to_string_lossy().ends_with(extension) {
-            let parent = path.parent().expect("!!parent");
-
-            debug!("adding {:?} to watch list", parent);
-            paths.insert(PathBuf::from(parent));
-        }
-
-        if metadata.is_dir() {
-            build_watch_paths(&entry.path().to_string_lossy(), paths, extension);
-        }
-    }
-}
-
-fn react_to_file_change(filename: &str, filter: &Fn(&str) -> bool, config: &WatcherConfig) {
-    if filter(filename) {
-        info!("reacting to change for file: {}", filename);
-        launch_command(config);
-        info!("command execution finished");
-    }
-}
+mod build_paths;
+mod change_actions;
 
 pub fn setup_watch(config: WatcherConfig) {
     let (tx, rx) = channel();
