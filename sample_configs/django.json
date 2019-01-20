@@ -1,0 +1,13 @@
+{
+  "command_config": {
+    "binary_path": "/tmp/webapp/venv/bin/python",
+    "args": [
+      "/tmp/webapp/manage.py",
+      "test",
+      "app"
+    ]
+  },
+  "debounce_in_seconds": 5,
+  "file_extension_to_watch_for": ".py",
+  "path_to_watch": "/tmp/webapp"
+}
