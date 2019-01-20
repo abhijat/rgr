@@ -2,14 +2,16 @@ use std::collections;
 use std::sync::mpsc::channel;
 use std::time::Duration;
 
-use notify::{DebouncedEvent, RecommendedWatcher, RecursiveMode, Watcher};
+use notify::{DebouncedEvent, RecommendedWatcher, Watcher};
 
 use crate::config_parser::WatcherConfig;
-use crate::dirwatch::build_paths::build_watch_paths;
-use crate::dirwatch::change_actions::react_to_file_change;
+use crate::dirwatch::file_change_actions::react_to_file_change;
+use crate::dirwatch::path_collection_actions::add_paths_to_inotify_watcher;
+use crate::dirwatch::path_collection_actions::build_watch_paths;
 
-mod build_paths;
-mod change_actions;
+mod path_collection_actions;
+mod file_change_actions;
+
 
 pub fn setup_watch(config: WatcherConfig) {
     let (tx, rx) = channel();
@@ -24,11 +26,7 @@ pub fn setup_watch(config: WatcherConfig) {
 
     info!("added {} paths to watch list", paths.len());
 
-    for path in paths {
-        if let Err(err) = watcher.watch(path.clone(), RecursiveMode::NonRecursive) {
-            error!("failed to add watch for {} with error {}", path.to_string_lossy(), err);
-        }
-    }
+    add_paths_to_inotify_watcher(paths, &mut watcher);
 
     let extension = extension.as_str();
     let filter = |s: &str| {
