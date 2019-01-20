@@ -6,5 +6,6 @@ pub fn react_to_file_change(filename: &str, filter: &Fn(&str) -> bool, config: &
         info!("reacting to change for file: {}", filename);
         launch_command(config);
         info!("command execution finished");
+        println!("Press any key to stop!");
     }
 }
