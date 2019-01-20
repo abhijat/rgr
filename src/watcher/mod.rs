@@ -39,7 +39,7 @@ pub fn setup_watch(shutdown_channel: Receiver<bool>, config: WatcherConfig) {
         s.ends_with(extension)
     };
 
-    let loop_interval = Duration::from_millis(250);
+    let loop_interval = Duration::from_millis(100);
     loop {
         match shutdown_channel.recv_timeout(loop_interval) {
             Ok(_) => {

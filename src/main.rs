@@ -1,3 +1,4 @@
+extern crate clap;
 extern crate env_logger;
 #[macro_use]
 extern crate log;
@@ -10,7 +11,10 @@ extern crate serde_json;
 use std::io::stdin;
 use std::sync::mpsc::channel;
 use std::thread;
+use std::time::Duration;
 
+use clap::App;
+use clap::Arg;
 use env_logger::Env;
 
 use crate::config_parser::build_config;
@@ -22,10 +26,23 @@ mod config_parser;
 
 
 fn main() {
+    let matches = App::new("Red-Green-Refactor")
+        .version("0.1.0")
+        .author("Abhijat Malviya <malviya.abhijat@gmail.com>")
+        .about("React to file changes by running commands")
+        .arg(Arg::with_name("config")
+            .short("c")
+            .long("config")
+            .help("path to config file")
+            .takes_value(true))
+        .get_matches();
+
     let env = Env::default().filter_or("RGR_LOG_LEVEL", "debug");
     env_logger::Builder::from_env(env).init();
 
-    let config = build_config("config.json");
+    let config_path = matches.value_of("config").unwrap_or("./config.json");
+
+    let config = build_config(config_path);
 
     let (tx, rx) = channel();
 
@@ -33,11 +50,12 @@ fn main() {
         setup_watch(rx, config);
     });
 
+    thread::sleep(Duration::from_secs(1));
     println!("Press any key to stop!");
 
     let mut buffer = String::new();
-    stdin().read_line(&mut buffer).unwrap();
+    stdin().read_line(&mut buffer).expect("!read_line");
 
-    tx.send(true).unwrap();
-    watch_thread.join().unwrap();
+    tx.send(true).expect("!send");
+    watch_thread.join().expect("!join");
 }
