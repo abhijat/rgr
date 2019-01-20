@@ -9,10 +9,10 @@ extern crate serde_derive;
 
 use env_logger::Env;
 
-use crate::dirwatch::setup_watch;
+use crate::watcher::setup_watch;
 use crate::config_parser::build_config;
 
-mod dirwatch;
+mod watcher;
 mod launcher;
 mod config_parser;
 
