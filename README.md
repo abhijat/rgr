@@ -5,7 +5,7 @@ This is a simple command line application which does the following, given a top 
 * Add a watch for every subdirectory which contains files of that extension
 * When files of that extension are changed in any of these watched subdirectories, run the given command
 
-This is done by using the [notify](https://github.com/passcod/notify) library.
+Watching the paths for changes is done by the [notify](https://github.com/passcod/notify) library.
 
 The code can be built using the rust toolchain, install it from [here](https://rustup.rs/)
 
@@ -41,9 +41,9 @@ The following keys are supported as part of the configuration:
 
 1. The command which will be run when a file changes
 2. The arguments to be passed to the command
-3. Events are clubbed for this duration, passed straight to notify
-4. File extension which will be scanned recursively in the root path
-5. The top level path where the files will be scanned in
+3. Events are clubbed for this duration, passed through to notify. I recommend to keep this around 2-5 seconds
+4. File extension which will be scanned recursively under the root path
+5. The top level path, the program looks for all subdirectories beneath this (recursively)
 
 `RGR_LOG_LEVEL` is an environment variable which can be used to set the level of logging for the program. 
 By default this is set to `debug`.
