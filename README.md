@@ -1,5 +1,9 @@
 #### RGR (red-green-refactor)
 
+
+[![asciicast](https://asciinema.org/a/4qxM8uyQIDTMXYW2KzuoTkKOx.svg)](https://asciinema.org/a/4qxM8uyQIDTMXYW2KzuoTkKOx?t=20)
+
+
 This is a simple command line application which does the following, given a top level directory and an extension:
 
 * Add a watch for every subdirectory which contains files of that extension
